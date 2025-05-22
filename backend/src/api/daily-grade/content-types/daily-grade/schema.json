@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "daily_grades",
+  "info": {
+    "singularName": "daily-grade",
+    "pluralName": "daily-grades",
+    "displayName": "Daily Grade",
+    "description": "Records daily grades and attendance for subjects"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": {
+      "type": "date",
+      "required": true,
+      "unique": false
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "dailyGrades"
+    },
+    "entries": {
+      "type": "component",
+      "repeatable": true,
+      "component": "grade.subject-entry",
+      "required": true,
+      "min": 1
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

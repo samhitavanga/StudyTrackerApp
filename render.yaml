@@ -1,0 +1,45 @@
+services:
+  # Backend service (Strapi)
+  - type: web
+    name: study-tracker-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: free
+    healthCheckPath: /_health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_CLIENT
+        value: sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_JWT_SECRET
+        generateValue: true
+      - key: APP_KEYS
+        generateValue: true
+      - key: API_TOKEN_SALT
+        generateValue: true
+
+  # Frontend service (Next.js)
+  - type: web
+    name: study-tracker-frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_BACKEND_URL
+        fromService:
+          name: study-tracker-backend
+          type: web
+          property: url
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        fromService:
+          name: study-tracker-frontend
+          type: web
+          property: url

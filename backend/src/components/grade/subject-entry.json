@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_grade_subject_entries",
+  "info": {
+    "displayName": "Subject Entry",
+    "description": "A grade and attendance entry for a subject"
+  },
+  "options": {},
+  "attributes": {
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "grade": {
+      "type": "decimal",
+      "min": 0,
+      "max": 100,
+      "required": true
+    },
+    "attended": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    }
+  }
+}

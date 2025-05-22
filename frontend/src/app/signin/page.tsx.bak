@@ -1,0 +1,131 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+export default function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+
+  // Only render the component on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
+    
+    // For now, we'll just redirect to the dashboard without actual authentication
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('username', email.split('@')[0]); // Use part before @ as username
+    
+    // Redirect to dashboard
+    router.push('/dashboard');
+  };
+
+  // Return null during server-side rendering
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center text-gray-600 dark:text-gray-300">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Sign in to your account
+        </h2>
+        
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              placeholder="Email address"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              placeholder="Password"
+            />
+          </div>
+          
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
+        
+        {/* Simple divider */}
+        <div className="mt-6 border-t border-gray-300 dark:border-gray-600 pt-6">
+          <div className="text-center mb-4 text-gray-500 dark:text-gray-400">
+            Or
+          </div>
+          
+          {/* Large, prominent button */}
+          <Link 
+            href="/signup" 
+            className="block w-full py-3 px-4 text-center border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Create a new account
+          </Link>
+          
+          {/* Highlighted message */}
+          <div className="mt-4 bg-gray-100 dark:bg-gray-700 rounded-md p-3 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              First time using Study Tracker?{' '}
+              <Link href="/signup" className="font-bold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 underline">
+                Sign up here
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

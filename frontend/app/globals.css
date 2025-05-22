@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #1f2937; /* text-gray-800 - darker for better readability */
+  --text-primary: #4b5563; /* text-gray-600 - good for most text */
+  --text-secondary: #6b7280; /* text-gray-500 - for less important text */
+  --text-muted: #9ca3af; /* text-gray-400 - for hints, placeholders */
+  --primary-color: #4f46e5; /* indigo-600 */
+  --primary-hover: #4338ca; /* indigo-700 */
+  --success-color: #10b981; /* emerald-500 */
+  --error-color: #ef4444; /* red-500 */
+  --warning-color: #f59e0b; /* amber-500 */
+  --info-color: #3b82f6; /* blue-500 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111827; /* gray-900 */
+    --foreground: #f9fafb; /* gray-50 */
+    --text-primary: #e5e7eb; /* gray-200 */
+    --text-secondary: #d1d5db; /* gray-300 */
+    --text-muted: #9ca3af; /* gray-400 */
+    --primary-color: #6366f1; /* indigo-500 - brighter in dark mode */
+    --primary-hover: #4f46e5; /* indigo-600 */
+    --success-color: #10b981; /* emerald-500 */
+    --error-color: #ef4444; /* red-500 */
+    --warning-color: #f59e0b; /* amber-500 */
+    --info-color: #3b82f6; /* blue-500 */
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+/* Improved form input styling */
+input, select, textarea {
+  color: var(--foreground);
+  background-color: transparent;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Ensure dark mode text is readable */
+@media (prefers-color-scheme: dark) {
+  input, select, textarea {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
