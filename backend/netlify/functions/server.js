@@ -1,20 +1,27 @@
-const path = require('path');
-const strapiDir = path.resolve(__dirname, '../../');
+// Simple proxy for Strapi API
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const serverless = require('serverless-http');
+const express = require('express');
+const cors = require('cors');
 
-// Environment variables are already set by Netlify
+const app = express();
 
-// Point to the Strapi application
-process.chdir(strapiDir);
+// Enable CORS for all routes
+app.use(cors());
 
-// Start Strapi
-const strapi = require('@strapi/strapi');
-strapi({ distDir: path.resolve(strapiDir, './dist') }).start();
+// Basic health check endpoint
+app.get('/', (req, res) => {
+  res.json({ status: 'Strapi API proxy is running' });
+});
 
-// Export the handler function for Netlify Functions
-exports.handler = async (event, context) => {
-  // Return a 200 response to acknowledge receipt of the event
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Strapi server is running' }),
-  };
-};
+// Redirect API requests to Strapi server
+app.use('/api', createProxyMiddleware({
+  target: process.env.STRAPI_URL || 'http://localhost:1337',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/api': '',
+  },
+}));
+
+// Export the serverless handler
+exports.handler = serverless(app);

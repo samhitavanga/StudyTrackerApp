@@ -3,11 +3,6 @@
   publish = "build"
   functions = "netlify/functions"
 
-[build.environment]
-  PYTHON_VERSION = "3.9.13"
-  RUBY_VERSION = "3.0.2"
-  GO_VERSION = "1.17.1"
-
 [dev]
   command = "npm run develop"
   port = 1337
