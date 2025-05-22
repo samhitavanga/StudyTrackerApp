@@ -34,7 +34,10 @@ const COOKIE_OPTIONS = {
  */
 export async function loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
   try {
-    const response = await fetch('http://localhost:1337/api/auth/local', {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+    console.log('Using Strapi URL for login:', strapiUrl);
+    
+    const response = await fetch(`${strapiUrl}/api/auth/local`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +73,10 @@ export async function loginUser(credentials: LoginCredentials): Promise<AuthResp
  */
 export async function registerUser(userData: RegisterData): Promise<AuthResponse> {
   try {
-    const response = await fetch('http://localhost:1337/api/auth/local/register', {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+    console.log('Using Strapi URL for registration:', strapiUrl);
+    
+    const response = await fetch(`${strapiUrl}/api/auth/local/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
