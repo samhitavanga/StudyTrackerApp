@@ -20,7 +20,12 @@ export const authOptions: NextAuthOptions = {
           console.log('Authenticating with Strapi at:', strapiUrl);
 
           try {
-            // Authenticate with Strapi
+            console.log('Attempting authentication with URL:', `${strapiUrl}/api/auth/local`);
+            
+            // Authenticate with Strapi - with longer timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            
             const response = await fetch(`${strapiUrl}/api/auth/local`, {
               method: 'POST',
               headers: {
@@ -30,14 +35,15 @@ export const authOptions: NextAuthOptions = {
                 identifier: credentials.email,
                 password: credentials.password,
               }),
-            });
+              signal: controller.signal
+            }).finally(() => clearTimeout(timeoutId));
 
             const data = await response.json();
             console.log('Strapi auth response status:', response.status);
 
             if (!response.ok) {
               console.error('Strapi authentication error:', data);
-              throw new Error(data.error?.message || 'Invalid credentials');
+              throw new Error(data.error?.message || data.message || 'Invalid credentials');
             }
 
             console.log('Authentication successful, user ID:', data.user.id);
