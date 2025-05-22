@@ -5,8 +5,11 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, username, password } = body;
 
+    console.log('Signup request received for email:', email);
+
     // Validate input
     if (!email || !password) {
+      console.error('Missing required fields');
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
@@ -15,6 +18,8 @@ export async function POST(request: Request) {
 
     // Check if Strapi URL is configured
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
+    console.log('Using Strapi URL for registration:', strapiUrl);
+    
     if (!strapiUrl) {
       console.error('NEXT_PUBLIC_STRAPI_URL is not configured');
       return NextResponse.json(
@@ -25,6 +30,15 @@ export async function POST(request: Request) {
 
     // Generate username from email if not provided
     const generatedUsername = username || email.split('@')[0];
+    console.log('Using username for registration:', generatedUsername);
+
+    // Create the request body with all required fields
+    const requestBody = {
+      username: generatedUsername,
+      email,
+      password,
+    };
+    console.log('Registration request body (sanitized):', { ...requestBody, password: '[REDACTED]' });
 
     // Register user in Strapi
     const registerResponse = await fetch(`${strapiUrl}/api/auth/local/register`, {
@@ -32,11 +46,7 @@ export async function POST(request: Request) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        username: generatedUsername,
-        email,
-        password,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const registerData = await registerResponse.json();

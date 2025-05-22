@@ -46,7 +46,7 @@ export default function LoginPage() {
           return;
         }
         
-        // Call sign-up API
+        // Call sign-up API - username will be generated server-side
         const response = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: {
