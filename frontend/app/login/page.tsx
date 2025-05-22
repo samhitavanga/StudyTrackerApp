@@ -15,44 +15,16 @@ export default function LoginPage() {
   const [backendAvailable, setBackendAvailable] = useState(true);
   const router = useRouter();
   
-  // Check if backend is available on component mount
+  // Always assume backend is available in production
   useEffect(() => {
-    const checkBackendStatus = async () => {
-      try {
-        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-        const response = await fetch(`${strapiUrl}/api/health`, { 
-          method: 'HEAD',
-          signal: AbortSignal.timeout(2000) // Timeout after 2 seconds
-        });
-        setBackendAvailable(response.ok);
-      } catch (error) {
-        console.log('Backend connection failed:', error);
-        setBackendAvailable(false);
-      }
-    };
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
+    console.log('Using Strapi URL:', strapiUrl);
     
-    checkBackendStatus();
+    // Always set to true in production deployment
+    setBackendAvailable(true);
   }, []);
 
-  const handleBypass = () => {
-    const userEmail = email || 'test@example.com';
-    
-    // Store mock authentication data in localStorage
-    localStorage.setItem('token', 'mock-token-for-testing');
-    localStorage.setItem('user', JSON.stringify({
-      id: 1,
-      username: 'TestStudent',
-      email: userEmail
-    }));
-    localStorage.setItem('isLoggedIn', 'true');
-    
-    // Store email for user-specific localStorage keys
-    localStorage.setItem('userEmail', userEmail);
-    sessionStorage.setItem('userEmail', userEmail);
-    
-    // Redirect to dashboard
-    router.push('/dashboard');
-  };
+  // No longer needed - removed bypass function
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,18 +192,7 @@ export default function LoginPage() {
             </button>
           </div>
           
-          {!backendAvailable && (
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={handleBypass}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-              >
-                <span>Continue Without Authentication</span>
-              </button>
-              <p className="text-xs text-gray-500 mt-2 text-center">Use this option to access the app with local storage only</p>
-            </div>
-          )}
+          {/* Continue without authentication button removed */}
           
           <div className="text-center">
             <button
