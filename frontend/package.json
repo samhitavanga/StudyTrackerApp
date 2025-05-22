@@ -12,6 +12,9 @@
     "@heroicons/react": "^2.2.0",
     "@types/chart.js": "^2.9.41",
     "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "axios": "^1.8.1",
     "chart.js": "^4.4.8",
     "date-fns": "^4.1.0",
@@ -23,15 +26,12 @@
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.1.7",
-    "typescript": "^5"
+    "eslint-config-next": "15.1.7"
   }
 }
